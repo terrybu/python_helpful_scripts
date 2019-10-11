@@ -7,6 +7,7 @@ from apimanager import vdata
 
 def main( argv ):
     """Main entry point for processing the file."""
+
     if ( len(argv) > 1 ):
         csv_input_file_name = argv[1]
         log = logfile.LogFile( os.path.basename(__file__), logfile.LogLevel.DEBUG )
@@ -16,15 +17,15 @@ def main( argv ):
             log.infoLog("Opening CSV file...")
             (file_handle,csv_file_reader) = csv_handler.open_csv_file_reader()
             log.infoLog("Processing ...")
-            response_array = vdata.pycurl_vData_radarScore_v2_phone_number_only( csv_file_reader, log)
-            field_names = [header_strings.get_phone_number_header(), header_strings.get_response_header(), header_strings.get_http_code_header()]
+            response_array = vdata.pycurl_vData_radarScore_v2( csv_file_reader, log)
+            field_names = [header_strings.get_phone_number_header(), header_strings.get_last_seen_date_header(), header_strings.get_response_header(), header_strings.get_http_code_header(), header_strings.get_prepostpaid_header()]
             (out_handle, csv_file_writer) = csv_handler.open_csv_writer( field_names )
-            csv_handler.write_response_to_csv_no_last_seen(csv_file_writer, response_array)
+            csv_handler.write_response_to_csv_with_last_seen(csv_file_writer, response_array)
             out_handle.close()
             log.infoLog("Writing complete.")
-        else:   
+        else:	
             exit()
-    else:    
+    else: 	 
         print("Insufficient parameters!")
         exit()
 
